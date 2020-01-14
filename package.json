@@ -1,0 +1,107 @@
+{
+  "name": "ember-plus-spike",
+  "version": "0.0.1",
+  "description": "Experimenting with building an ember-plus C++ binding",
+  "main": "dist/index.js",
+  "scripts": {
+    "info": "npm-scripts-info",
+    "cleancache": "yarn cache clean atem-connection atem-state casparcg-connection casparcg-state superfly-timeline",
+    "unlink:all": "yarn unlink atem-connection & yarn unlink atem-state & yarn unlink casparcg-connection & yarn unlink casparcg-state & yarn unlink superfly-timeline",
+    "installclean": "yarn unlink:all & yarn cleancache && yarn --check-files",
+    "buildclean": "yarn installclean && yarn build",
+    "build": "trash dist && node-gyp build && yarn build:main",
+    "buildtest": "yarn build && jest",
+    "build:main": "tsc -p tsconfig.json",
+    "lint": "tslint --project tsconfig.jest.json --config tslint.json",
+    "unitci": "jest --runInBand",
+    "unit": "jest --runInBand",
+    "testci": "yarn test",
+    "test": "yarn lint && yarn build && yarn unit",
+    "test:integration": "yarn lint && jest --config=jest-integration.config.js",
+    "watch": "jest --runInBand --watch",
+    "cov": "jest --runInBand --coverage; open-cli coverage/lcov-report/index.html",
+    "cov-open": "open-cli coverage/lcov-report/index.html",
+    "send-coverage": "yarn testci && codecov",
+    "docs": "yarn docs:html && open-cli docs/index.html",
+    "docs:test": "yarn docs:html",
+    "docs:html": "typedoc src/index.ts --excludePrivate --mode file --theme minimal --out docs",
+    "docs:json": "typedoc --mode file --json docs/typedoc.json src/index.ts",
+    "docs:publish": "yarn docs:html && gh-pages -d docs",
+    "changelog": "standard-version",
+    "release": "yarn reset && yarn testci && yarn docs:publish && yarn changelog",
+    "prepareChangelog": "standard-version --prerelease",
+    "reset": "git clean -dfx && git reset --hard && yarn",
+    "ci": "yarn testci",
+    "validate:dependencies": "yarn audit && yarn license-validate",
+    "license-validate": "node-license-validator -p -d --allow-licenses MIT BSD BSD-2-Clause BSD-3-Clause ISC Apache Unlicense WTFPL GPL GPL-2.0-or-later --allow-packages cycle",
+    "watch-server": "nodemon --watch src -e ts,tsx --exec ts-node ./src/server.ts",
+    "server": "ts-node ./src/server.ts",
+    "start": "node ./dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nrkno/tv-automation-quantel-gateway.git"
+  },
+  "keywords": [
+    "broadcast",
+    "Lawo",
+    "binding",
+    "Ember Plus",
+    "automation",
+    "production",
+    "open",
+    "source"
+  ],
+  "contributors": [
+    {
+      "name": "Richard Cartwright",
+      "email": "spark@streampunnk.media",
+      "url": "https://streampunk.media"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sparkpunkd/ember-plus-spike/issues"
+  },
+  "homepage": "https://github.com/sparkpunkd/ember-plus-spike#readme",
+  "scripts-info": {
+    "info": "Display information about the scripts",
+    "installclean": "Remove yarn.lock, cleare yarn cache, and reinstall",
+    "build": "(Trash and re)build the library",
+    "build:main": "Builds main build command without trash.",
+    "lint": "Lint all typescript source files",
+    "unit": "Build the library and run unit tests",
+    "test": "Lint, build, and test the library",
+    "test:integration": "Integration tests. Work in progress",
+    "watch": "Watch source files, rebuild library on changes, rerun relevant tests",
+    "cov": "Run tests, generate the HTML coverage report, and open it in a browser",
+    "cov-open": "Open current test coverage",
+    "send-coverage": "send coverage to codecov",
+    "docs": "Generate HTML API documentation and open it in a browser",
+    "docs:test": "Running the docs generation for testing.",
+    "docs:html": "Generate HTML documentation",
+    "docs:json": "Generate API documentation in typedoc JSON format",
+    "docs:publish": "Generate HTML API documentation and push it to GitHub Pages",
+    "changelog": "Bump package.json version, update CHANGELOG.md, tag a release",
+    "release": "Clean, build, test, publish docs, and prepare release (a one-step publish process). Updates versions and creates git commits.",
+    "reset": "Delete all untracked files and reset the repo to the last commit",
+    "ci": "Test script for running by the CI (CircleCI)",
+    "validate:dependencies": "Scan dependencies for vulnerabilities and check licenses",
+    "license-validate": "Validate licenses for dependencies.",
+    "watch-server": "Run HTTP server and restart when changes are made."
+  },
+  "engines": {
+    "node": ">=10.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.4",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "bindings": "^1.5.0"
+  },
+  "standard-version": {
+    "message": "chore(release): %s [skip ci]",
+    "tagPrefix": ""
+  }
+}
